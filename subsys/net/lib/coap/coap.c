@@ -134,7 +134,7 @@ u32_t coap_init(u32_t token_rand_seed,
 	(void)token_seed;
 
 	internal_coap_observe_init();
-	message_id_counter = 1;
+	message_id_counter = (u16_t)token_rand_seed;
 
 	err_code = coap_transport_init(transport_param);
 	if (err_code != 0) {
