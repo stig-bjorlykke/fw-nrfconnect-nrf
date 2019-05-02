@@ -740,7 +740,11 @@ u32_t coap_time_tick(void)
 					item->buffer,
 					item->buffer_len);
 				if (err_code != 0) {
-					app_error_notify(err_code, NULL);
+					coap_message_t message = {
+						.transport = item->transport,
+						.remote = (struct sockaddr *)&item->remote,
+					};
+					app_error_notify(err_code, &message);
 				}
 			}
 
@@ -753,7 +757,11 @@ u32_t coap_time_tick(void)
 
 				COAP_MUTEX_UNLOCK();
 
-				item->callback(ETIMEDOUT, item->arg, NULL);
+				coap_message_t message = {
+					.transport = item->transport,
+					.remote = (struct sockaddr *)&item->remote,
+				};
+				item->callback(ETIMEDOUT, item->arg, &message);
 
 				COAP_MUTEX_LOCK();
 
